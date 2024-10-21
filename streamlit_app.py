@@ -23,18 +23,6 @@ with st.expander('Data'):
 with st.expander('Data visualization'):
   st.scatter_chart(data=df, x='bill_length_mm', y='body_mass_g', color='species')
 
-with st.expander('Visualization: Species by Island and Gender'):
-    st.write('**Bar Chart**')
-
-    # Group the data by island, species, and sex
-    grouped_data = df.groupby(['island', 'species', 'sex']).size().unstack(fill_value=0).reset_index()
-
-    # Pivot the data for easier plotting
-    pivot_data = grouped_data.pivot_table(index=['species'], columns=['island', 'sex'], values=0, fill_value=0)
-
-    # Display the bar chart using Streamlit's st.bar_chart
-    st.bar_chart(pivot_data)
-
 # Input features
 with st.sidebar:
   st.header('Input features')
