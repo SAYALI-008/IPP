@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 
 st.title('🤖AppliML🤖')
@@ -22,6 +23,48 @@ with st.expander('Data'):
 
 with st.expander('Data visualization'):
   st.scatter_chart(data=df, x='bill_length_mm', y='body_mass_g', color='species')
+
+with st.expander('Visualization: Species by Island and Gender'):
+    st.write('**Bar Chart**')
+
+    # Get unique islands and species
+    unique_islands = df['island'].unique()
+    unique_species = df['species'].unique()
+
+    # Define the layout for the subplots (1 row, as many columns as there are islands)
+    fig, axes = plt.subplots(1, len(unique_islands), figsize=(15, 6), sharey=True)
+
+    # Loop through each island and create a bar plot
+    for i, island in enumerate(unique_islands):
+        # Filter the data for the current island
+        island_data = df[df['island'] == island]
+        
+        # Group the data by species and sex, count occurrences, and reindex to include all species
+        grouped_data = island_data.groupby(['species', 'sex']).size().unstack(fill_value=0)
+        grouped_data = grouped_data.reindex(unique_species, fill_value=0)  # Reindex to ensure all species are shown
+
+        # Plot bars for each sex category
+        species = grouped_data.index
+        sex_categories = grouped_data.columns
+        bar_width = 0.35
+        x = np.arange(len(species))
+
+        ax = axes[i]  # Select the current subplot
+        for j, sex in enumerate(sex_categories):
+            ax.bar(x + j * bar_width, grouped_data[sex], width=bar_width, label=sex)
+        
+        # Set titles and labels
+        ax.set_title(f'{island} Island')
+        ax.set_xticks(x + bar_width / 2)
+        ax.set_xticklabels(species)
+        ax.legend(title='Sex')
+        if i == 0:
+            ax.set_ylabel('Count')
+        ax.set_xlabel('Species')
+
+    # Adjust layout and display the plot
+    plt.tight_layout()
+    st.pyplot(fig)
 
 # Input features
 with st.sidebar:
