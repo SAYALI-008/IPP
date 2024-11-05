@@ -82,11 +82,11 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 # Model training and inference
 ## Train the ML model
 clf = RandomForestClassifier()
-clf.fit(X_train, y_train)
+clf.fit(X, y)
 
 ## Apply model to make predictions
-prediction = clf.predict(X_test)
-prediction_proba = clf.predict_proba(X_test)
+prediction = clf.predict(input_row)
+prediction_proba = clf.predict_proba(input_row)
 
 df_prediction_proba = pd.DataFrame(prediction_proba)
 df_prediction_proba.columns = ['Adelie', 'Chinstrap', 'Gentoo']
@@ -130,6 +130,15 @@ st.success(str(penguins_species[prediction][0]))
 
 # Model Evaluation
 st.title("Model Evaluation")
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train the ML model on the training set
+clf = RandomForestClassifier()
+clf.fit(X_train, y_train)
+
+# Apply model to make predictions on the test set
+y_pred = clf.predict(X_test)
 
 # Evaluate the model
 accuracy = accuracy_score(y_test, y_pred)
