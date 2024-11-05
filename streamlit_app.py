@@ -125,25 +125,8 @@ from sklearn.metrics import confusion_matrix, classification_report, accuracy_sc
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Data preparation (same as before)
-encode = ['island', 'sex']
-df_penguins = pd.get_dummies(input_penguins, prefix=encode)
-
-X = df_penguins.drop('species', axis=1)  # Replace 'species' with your actual target column name
-y = df_penguins['species']  # Replace 'species' with your actual target column name
-
-# Split the data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Train the Random Forest Classifier
-clf = RandomForestClassifier(random_state=42)
-clf.fit(X_train, y_train)
-
-# Make predictions on the test set
-y_pred = clf.predict(X_test)
-
-# Streamlit app layout
-st.title("Penguin Species Prediction Evaluation")
+# Model Evaluation
+st.title("Model Evaluation")
 
 # Evaluate the model
 accuracy = accuracy_score(y_test, y_pred)
@@ -162,11 +145,11 @@ plt.xlabel('Predicted')
 plt.title('Confusion Matrix')
 st.pyplot(plt)
 
-# Generate a classification report
+# Generate and display classification report
 class_report = classification_report(y_test, y_pred, target_names=['Adelie', 'Chinstrap', 'Gentoo'], output_dict=True)
 st.subheader("Classification Report")
 st.text(classification_report(y_test, y_pred, target_names=['Adelie', 'Chinstrap', 'Gentoo']))
 
-# Optionally, display the classification report in a more user-friendly format
+# Display classification report in a more user-friendly format
 class_report_df = pd.DataFrame(class_report).transpose()
 st.dataframe(class_report_df, use_container_width=True)
