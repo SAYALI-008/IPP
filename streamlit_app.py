@@ -2,6 +2,10 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 st.title('🤖AppliML🤖')
 
@@ -73,15 +77,16 @@ with st.expander('Data preparation'):
   st.write('**Encoded y**')
   y
 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Model training and inference
 ## Train the ML model
 clf = RandomForestClassifier()
-clf.fit(X, y)
+clf.fit(X_train, y_train)
 
 ## Apply model to make predictions
-prediction = clf.predict(input_row)
-prediction_proba = clf.predict_proba(input_row)
+prediction = clf.predict(X_test)
+prediction_proba = clf.predict_proba(X_test)
 
 df_prediction_proba = pd.DataFrame(prediction_proba)
 df_prediction_proba.columns = ['Adelie', 'Chinstrap', 'Gentoo']
@@ -120,10 +125,8 @@ st.dataframe(df_prediction_proba,
 penguins_species = np.array(['Adelie', 'Chinstrap', 'Gentoo'])
 st.success(str(penguins_species[prediction][0]))
 
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
-import seaborn as sns
-import matplotlib.pyplot as plt
+
+
 
 # Model Evaluation
 st.title("Model Evaluation")
