@@ -4,5 +4,5 @@ The app predicts the species of penguins using Random Forest
 
 ## Demo App
 
-[![Streamlit App]([https://appliml.streamlit.app/])
+[![Streamlit App]([[https://appliml.streamlit.app/](https://appliml.streamlit.app/)])
 
